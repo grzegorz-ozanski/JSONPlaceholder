@@ -21,8 +21,8 @@ def main() -> None:
     """
     parser = argparse.ArgumentParser(description='Sample {JSON} Placeholder user API exerciser')
     parser.add_argument('--geoapify-api-key', help='Geoapify API key')
-    parser.add_argument('--json', help='Output JSON file name', default='test.json')
-    parser.add_argument('--xls', help='Output XLS file name', default='test.xls')
+    parser.add_argument('--json', help='Output JSON file name')
+    parser.add_argument('--xls', help='Output XLS file name')
     parser.add_argument('--data-filter', help='Data filters (comma-separated)')
     parser.add_argument('-s', '--silent', help='No verbose output', action='store_true', default=False)
     args = parser.parse_args()
