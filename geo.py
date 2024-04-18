@@ -21,9 +21,11 @@ def reverse_geocode(lat: str, lon: str, api_key: str) -> dict[str, str]:
         with urllib.request.urlopen(api_url) as url:
             data = json.load(url)
             location = data['features'][0]['properties']
+            # Not many of the people from the sample API are actually located in some meaningful place...
             try:
                 result['location'] = location['formatted']
             except KeyError:
+                # most are in the middle of the ocean or in Antarctic
                 result['location'] = location['name']
             result['timezone'] = location['timezone']['name']
     except KeyError:

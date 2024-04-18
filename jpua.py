@@ -9,9 +9,11 @@ import people as people_manager
 from geo import reverse_geocode
 
 USER_API_URL: str = 'https://jsonplaceholder.typicode.com/users'
-GEOAPIFY_KEY: str = '4c0d2f6d926a4989b11ec3f03d98f641'
+GEOAPIFY_KEY: str = '4c0d2f6d926a4989b11ec3f03d98f641'  # I know, normally unsafe
+
 DEFAULT_FILTERS = ('name', 'username', 'location', 'timezone',
-                'address.geo.lat', 'address.geo.lng', 'company.email')
+                   'address.geo.lat', 'address.geo.lng', 'company.email')
+
 
 def main() -> None:
     """
@@ -33,6 +35,8 @@ def main() -> None:
 
     # Get location name and timezone using provided reverse geocode function
     people.update_location(partial(reverse_geocode, api_key=geoapify_key))
+
+    # Perform requested actions
     if not args.silent:
         people.print(*keys)
     if args.json:

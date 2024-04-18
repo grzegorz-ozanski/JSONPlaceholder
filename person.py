@@ -27,12 +27,18 @@ class Person:
     LATITUDE = 'address.geo.lat'
     LONGITUDE = 'address.geo.lng'
 
+    EMAIL_COMPANY_IGNORE_WORDS = ['llc', 'and']
+    EMAIL_USER_IGNORE_PATTERN = r'^mr.*\.$'
+
     def __init__(self, data: dict[str, ...]):
         self.data = attridict(data)  # pylint: disable=not-callable
-        self.data.company.email = (f'{'.'.join([item.lower() for item in self.data.name.split()
-                                                if not re.search(r'^mr.*\.$', item, re.IGNORECASE)])}@'
-                                   f'{'-'.join([item.lower() for item in self.data.company.name.split()
-                                                if item.lower() not in ['llc', 'and']])}.com')
+        # Create an e-mail from user and company name, removing prefixes from user name
+        # and suffixes and infixes from company name
+        self.data.company.email = \
+            f'{'.'.join([item.lower() for item in self.data.name.split() 
+                         if not re.search(Person.EMAIL_USER_IGNORE_PATTERN, item, re.IGNORECASE)])}@' \
+            f'{'-'.join([item.lower() for item in self.data.company.name.split() 
+                         if item.lower() not in Person.EMAIL_COMPANY_IGNORE_WORDS])}.com'
 
     def __getitem__(self, key: str):
         return self.get(key)

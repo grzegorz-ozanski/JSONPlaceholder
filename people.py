@@ -92,15 +92,20 @@ class People:
         :param filename: XLS file name
         :param filter_args: Filter columns names
         """
-        with xlsxwriter.Workbook(filename) as wb:
+        with xlsxwriter.Workbook(filename) as workbook:
             data = self._filter(*filter_args)
-            ws = wb.add_worksheet()
-            max_len = {key: len(key) for key in data[0].keys()}
-            ws.write_row(0, 0, data[0].keys())
+            worksheet = workbook.add_worksheet()
+            # Set initial column width
+            column_width = {key: len(key) for key in data[0].keys()}
+            # Write headers
+            worksheet.write_row(0, 0, data[0].keys())
+            # Write data
             for row, item in enumerate(data, start=1):
                 for col, key in enumerate(item.keys()):
-                    ws.write(row, col, item[key])
-                    if (current_len := len(item[key])) > max_len[key]:
-                        max_len[key] = current_len
-            for col, key in enumerate(max_len.keys()):
-                ws.set_column(col, col, max_len[key])
+                    worksheet.write(row, col, item[key])
+                    # Update column width if necessary
+                    if (current_len := len(item[key])) > column_width[key]:
+                        column_width[key] = current_len
+            # Apply column width to worksheet
+            for col, key in enumerate(column_width.keys()):
+                worksheet.set_column(col, col, column_width[key])
